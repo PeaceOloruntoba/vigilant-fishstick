@@ -15,7 +15,7 @@ export default function Editorial() {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
           className="md:col-span-5"
         >
           <h2
@@ -42,7 +42,7 @@ export default function Editorial() {
           initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
           className="relative aspect-[4/5] w-full overflow-hidden md:col-span-7 md:aspect-[16/11]"
         >
           {/* Editorial image — replace src with a licensed asset before launch */}

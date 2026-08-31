@@ -1,8 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { GiTreeBranch, GiPlantRoots, GiWateringCan } from "react-icons/gi";
 import type { IconType } from "react-icons";
+
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
 type Service = {
   icon: IconType;
@@ -31,12 +33,12 @@ const SERVICES: Service[] = [
   },
 ];
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 32 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.6, delay: i * 0.12, ease: EASE_OUT },
   }),
 };
 

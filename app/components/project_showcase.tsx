@@ -93,7 +93,7 @@ export default function ProjectShowcase() {
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] as const }}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-emerald-950/5">
                   {/* Project image — replace src with a licensed asset before launch */}
