@@ -8,6 +8,7 @@ import Editorial from "./components/editorial";
 import ProjectShowcase from "./components/project_showcase";
 import Contact from "./components/contact";
 import Footer from "./components/footer";
+import Testimonials from "./components/testimonials";
 
 // ---------------------------------------------------------------------------
 // Fonts — loaded as CSS variables so both Server and Client Components in
@@ -79,6 +80,7 @@ export default function Home() {
       <Services />
       <Editorial />
       <ProjectShowcase />
+      <Testimonials />
       <Contact />
       <Footer />
     </main>
