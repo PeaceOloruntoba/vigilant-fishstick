@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 
@@ -22,9 +23,17 @@ export default function Navigation() {
       >
         <a
           href="#top"
-          className="font-[family-name:var(--font-fraunces)] text-xl tracking-wide text-emerald-950 md:text-2xl"
+          className="flex items-center gap-3 font-[family-name:var(--font-fraunces)] text-xl tracking-wide text-emerald-950 md:text-2xl"
         >
-          vredezara
+          <Image
+            src="/logo.png"
+            alt="Vredezara Logo"
+            width={36}
+            height={36}
+            className="h-8 w-auto object-contain md:h-9"
+            priority
+          />
+          <span>vredezara</span>
         </a>
 
         {/* Desktop links */}
