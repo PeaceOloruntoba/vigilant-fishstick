@@ -47,11 +47,11 @@ export default function Editorial() {
         >
           {/* Editorial image — replace src with a licensed asset before launch */}
           <Image
-            src="https://unsplash.com"
+            src="https://www.ggmlandscaping.co.uk/wp-content/uploads/2025/08/Urban-Courtyard-Garden-Style.png"
             alt="Close, architectural view of a sustainably designed garden courtyard"
             fill
             unoptimized
-            className="object-cover"
+            className="object-cover rounded-md"
           />
         </motion.div>
       </div>
