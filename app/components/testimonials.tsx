@@ -1,9 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
-import { FaStar } from "react-icons/fa";
-
-const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 type Testimonial = {
   id: string;
@@ -64,24 +63,73 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.08, ease: EASE_OUT },
-  }),
-};
-
 export default function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const total = TESTIMONIALS.length;
+
+  const nextSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % total);
+  }, [total]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
+  // Infinite 8s auto-scroll timer
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [nextSlide, isPaused]);
+
+  // Touch Swipe Handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 40;
+
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Helper for circular modulo index wrapping
+  const getVisibleIndices = () => {
+    const prev = (currentIndex - 1 + total) % total;
+    const next = (currentIndex + 1) % total;
+    return { prev, current: currentIndex, next };
+  };
+
+  const { prev, current, next } = getVisibleIndices();
+
   return (
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="w-full bg-stone-50 px-4 py-20 md:px-8 md:py-28 lg:px-16"
+      className="w-full overflow-hidden bg-stone-50 px-4 py-20 md:px-8 md:py-28 lg:px-16"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl text-center md:text-left">
           <h2
             id="testimonials-heading"
             className="font-[family-name:var(--font-fraunces)] text-2xl text-emerald-950 md:text-4xl"
@@ -89,68 +137,122 @@ export default function Testimonials() {
             From the gardens we've kept
           </h2>
           <p className="mt-4 text-emerald-950/70 md:text-lg">
-            A few words from the people who live with, work in, and manage
-            the spaces we've designed.
+            A few words from the people who live with, work in, and manage the spaces we've designed.
           </p>
         </div>
 
-        {/* Mobile / tablet: horizontal snap-scroll. Desktop: static grid. */}
+        {/* Carousel Container */}
         <div
-          role="list"
-          aria-label="Client testimonials"
-          className="
-            mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4
-            [-ms-overflow-style:none] [scrollbar-width:none]
-            [&::-webkit-scrollbar]:hidden
-            sm:gap-6
-            md:grid md:grid-cols-2 md:overflow-visible md:pb-0
-            lg:grid-cols-3
-          "
+          className="relative mt-12 flex items-center justify-center min-h-[420px] md:min-h-[380px] touch-pan-y select-none"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
-          {TESTIMONIALS.map((testimonial, index) => (
-            <motion.article
-              key={testimonial.id}
-              role="listitem"
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              className="
-                flex w-[82vw] shrink-0 snap-center flex-col justify-between
-                rounded-2xl border border-emerald-950/10 bg-white p-6
-                sm:w-[60vw] sm:p-7
-                md:w-auto md:shrink md:snap-none
-              "
-            >
-              <div>
-                <div className="flex gap-0.5" aria-hidden="true">
-                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                    <FaStar key={starIndex} className="h-3.5 w-3.5 text-emerald-700" />
-                  ))}
-                </div>
+          {/* Previous Slide (Faded Left) */}
+          <div
+            onClick={prevSlide}
+            className="absolute left-0 z-0 hidden w-[30%] -translate-x-12 scale-90 opacity-40 transition-all duration-700 hover:cursor-pointer md:block lg:w-[35%] lg:-translate-x-16"
+          >
+            <TestimonialCard testimonial={TESTIMONIALS[prev]} isActive={false} />
+          </div>
 
-                <p className="mt-4 font-[family-name:var(--font-fraunces)] text-lg italic leading-relaxed text-emerald-950 sm:text-xl">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-              </div>
+          {/* Active Slide (Center with 8s Zoom-Out Animation) */}
+          <div className="z-10 w-full max-w-md md:max-w-lg lg:max-w-xl">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={TESTIMONIALS[current].id}
+                initial={{ opacity: 0, scale: 1.06 }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  transition: {
+                    opacity: { duration: 0.5 },
+                    scale: { duration: 8, ease: "linear" }, // Continuous slow 8s zoom-out
+                  },
+                }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.4 } }}
+              >
+                <TestimonialCard testimonial={TESTIMONIALS[current]} isActive={true} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-              <div className="mt-6 border-t border-emerald-950/10 pt-4">
-                <p className="text-sm font-medium text-emerald-950">
-                  {testimonial.name}
-                </p>
-                <p className="mt-0.5 text-xs text-emerald-950/60">
-                  {testimonial.role}, {testimonial.project}
-                </p>
-              </div>
-            </motion.article>
+          {/* Next Slide (Faded Right) */}
+          <div
+            onClick={nextSlide}
+            className="absolute right-0 z-0 hidden w-[30%] translate-x-12 scale-90 opacity-40 transition-all duration-700 hover:cursor-pointer md:block lg:w-[35%] lg:translate-x-16"
+          >
+            <TestimonialCard testimonial={TESTIMONIALS[next]} isActive={false} />
+          </div>
+        </div>
+
+        {/* Carousel Controls */}
+        <div className="mt-8 flex items-center justify-center gap-6">
+          <button
+            onClick={prevSlide}
+            aria-label="Previous testimonial"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-950/20 text-emerald-950 transition-colors hover:bg-emerald-950 hover:text-white"
+          >
+            <FaChevronLeft className="h-3.5 w-3.5" />
+          </button>
+
+          <div className="flex gap-2">
+            {TESTIMONIALS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === currentIndex ? "w-8 bg-emerald-900" : "w-2 bg-emerald-950/20"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={nextSlide}
+            aria-label="Next testimonial"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-950/20 text-emerald-950 transition-colors hover:bg-emerald-950 hover:text-white"
+          >
+            <FaChevronRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialCard({
+  testimonial,
+  isActive,
+}: {
+  testimonial: Testimonial;
+  isActive: boolean;
+}) {
+  return (
+    <div
+      className={`flex flex-col justify-between rounded-2xl border border-emerald-950/10 bg-white p-6 transition-shadow duration-300 sm:p-8 ${
+        isActive ? "shadow-xl ring-1 ring-emerald-950/5" : "shadow-sm"
+      }`}
+    >
+      <div>
+        <div className="flex gap-0.5" aria-hidden="true">
+          {Array.from({ length: 5 }).map((_, starIndex) => (
+            <FaStar key={starIndex} className="h-3.5 w-3.5 text-emerald-700" />
           ))}
         </div>
 
-        <p className="mt-4 text-xs text-emerald-950/40 md:hidden">
-          Swipe to read more
+        <p className="mt-4 font-[family-name:var(--font-fraunces)] text-base italic leading-relaxed text-emerald-950 sm:text-lg lg:text-xl">
+          &ldquo;{testimonial.quote}&rdquo;
         </p>
       </div>
-    </section>
+
+      <div className="mt-6 border-t border-emerald-950/10 pt-4">
+        <p className="text-sm font-semibold text-emerald-950">{testimonial.name}</p>
+        <p className="mt-0.5 text-xs text-emerald-950/60">
+          {testimonial.role}, {testimonial.project}
+        </p>
+      </div>
+    </div>
   );
 }
