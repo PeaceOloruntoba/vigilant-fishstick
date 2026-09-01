@@ -79,16 +79,18 @@ export default function Testimonials() {
     setCurrentIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Infinite 8s auto-scroll timer
+  // Infinite auto-scroll timer (advances every 8 seconds)
   useEffect(() => {
     if (isPaused) return;
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [nextSlide, isPaused]);
 
-  // Touch Swipe Handlers
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, 8000);
+
+    return () => clearInterval(timer);
+  }, [isPaused, total]);
+
+  // Touch handlers for mobile swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
   };
@@ -111,14 +113,9 @@ export default function Testimonials() {
     touchEndX.current = null;
   };
 
-  // Helper for circular modulo index wrapping
-  const getVisibleIndices = () => {
-    const prev = (currentIndex - 1 + total) % total;
-    const next = (currentIndex + 1) % total;
-    return { prev, current: currentIndex, next };
-  };
-
-  const { prev, current, next } = getVisibleIndices();
+  // Wrap indices for circular left/active/right calculation
+  const prev = (currentIndex - 1 + total) % total;
+  const next = (currentIndex + 1) % total;
 
   return (
     <section
@@ -156,23 +153,23 @@ export default function Testimonials() {
             <TestimonialCard testimonial={TESTIMONIALS[prev]} isActive={false} />
           </div>
 
-          {/* Active Slide (Center with 8s Zoom-Out Animation) */}
+          {/* Active Center Slide (8s Slow Zoom-In Animation) */}
           <div className="z-10 w-full max-w-md md:max-w-lg lg:max-w-xl">
             <AnimatePresence mode="wait">
               <motion.div
-                key={TESTIMONIALS[current].id}
-                initial={{ opacity: 0, scale: 1.06 }}
+                key={TESTIMONIALS[currentIndex].id}
+                initial={{ opacity: 0, scale: 1 }}
                 animate={{
                   opacity: 1,
-                  scale: 1,
+                  scale: 1.06,
                   transition: {
-                    opacity: { duration: 0.5 },
-                    scale: { duration: 8, ease: "linear" }, // Continuous slow 8s zoom-out
+                    opacity: { duration: 0.4 },
+                    scale: { duration: 8, ease: "linear" }, // Slow zoom-in over 8 seconds
                   },
                 }}
-                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.4 } }}
+                exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.3 } }}
               >
-                <TestimonialCard testimonial={TESTIMONIALS[current]} isActive={true} />
+                <TestimonialCard testimonial={TESTIMONIALS[currentIndex]} isActive={true} />
               </motion.div>
             </AnimatePresence>
           </div>
@@ -186,7 +183,7 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* Carousel Controls */}
+        {/* Navigation & Dots */}
         <div className="mt-8 flex items-center justify-center gap-6">
           <button
             onClick={prevSlide}
