@@ -32,7 +32,7 @@ export default function Hero() {
     >
       {/* Background scenery image — replace src with a licensed asset before launch */}
       <Image
-        src="https://unsplash.com"
+        src="https://static.vecteezy.com/system/resources/thumbnails/072/213/711/small/sundrenched-garden-path-roses-greenery-and-golden-hour-light-photo.jpg"
         alt="Sweeping botanical landscape with layered greenery at golden hour"
         fill
         priority
