@@ -30,17 +30,16 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-[92vh] w-full items-end overflow-hidden md:min-h-screen"
     >
-      {/* Background scenery image — replace src with a licensed asset before launch */}
+      {/* Background — extracted from the company profile; swap for higher-resolution
+          photography (1920px+ wide) when available. */}
       <Image
-        src="https://static.vecteezy.com/system/resources/thumbnails/072/213/711/small/sundrenched-garden-path-roses-greenery-and-golden-hour-light-photo.jpg"
-        alt="Sweeping botanical landscape with layered greenery at golden hour"
+        src="/images/hero/hero-background.jpg"
+        alt="Layered flower border and lawn maintained by Landfairy Global Investment Ltd"
         fill
         priority
-        unoptimized
         className="object-cover object-center"
       />
 
-      {/* Moody gradient overlay for legibility */}
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-stone-50/20"
@@ -57,24 +56,24 @@ export default function Hero() {
             variants={itemVariants}
             className="mb-4 font-[family-name:var(--font-fraunces)] text-base italic text-stone-100/90 md:text-lg"
           >
-            A design studio for living landscapes
+            Landscape architecture, horticulture and property maintenance
           </motion.p>
 
           <motion.h1
             variants={itemVariants}
             className="font-[family-name:var(--font-fraunces)] text-3xl leading-[1.1] text-stone-50 md:text-5xl lg:text-6xl"
           >
-            Crafting Living Masterpieces: Premium Landscape Architecture and
-            Horticulture Designs
+            Cultivating Landscapes. Growing Value.
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
             className="mt-6 max-w-xl text-base text-stone-200 md:text-lg"
           >
-            We design and tend gardens, courtyards, and interior plantings
-            that grow more beautiful with every season — built on sustainable
-            horticultural practice and a patient, editorial eye.
+            Landfairy Global Investment Ltd (RC 8189342) plans, installs and
+            maintains landscapes for corporate, residential, institutional
+            and government clients across Nigeria — treating every project
+            as a living asset from first design to long-term stewardship.
           </motion.p>
 
           <motion.div
@@ -85,13 +84,13 @@ export default function Hero() {
               href="#contact"
               className="w-full rounded-full bg-emerald-700 px-7 py-3.5 text-center text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 sm:w-auto"
             >
-              Book Consultation
+              Request a Quote
             </a>
             <a
               href="#projects"
               className="w-full rounded-full border border-stone-50/40 px-7 py-3.5 text-center text-sm font-medium text-stone-50 transition-colors hover:border-stone-50 hover:bg-stone-50/10 sm:w-auto"
             >
-              View Portfolio
+              View Our Projects
             </a>
           </motion.div>
         </div>

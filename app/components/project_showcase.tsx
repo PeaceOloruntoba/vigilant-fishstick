@@ -3,25 +3,75 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import { GiTreeBranch } from "react-icons/gi";
 
-type Category = "All" | "Residential" | "Commercial" | "Interior";
+type Category = "All" | "Estate" | "Residential" | "Institutional";
 
 type Project = {
   id: string;
   name: string;
   location: string;
+  scope: string;
+  year?: string;
   category: Exclude<Category, "All">;
+  /** Path under /public. Omitted where no site photo was supplied yet. */
+  image?: string;
 };
 
-const CATEGORIES: Category[] = ["All", "Residential", "Commercial", "Interior"];
+const CATEGORIES: Category[] = ["All", "Estate", "Residential", "Institutional"];
 
 const PROJECTS: Project[] = [
-  { id: "p1", name: "Hollow Creek Residence", location: "Sonoma, CA", category: "Residential" },
-  { id: "p2", name: "Marlowe Terrace Courtyard", location: "Austin, TX", category: "Residential" },
-  { id: "p3", name: "Anders & Vale HQ Atrium", location: "Portland, OR", category: "Commercial" },
-  { id: "p4", name: "Birchgate Hotel Grounds", location: "Asheville, NC", category: "Commercial" },
-  { id: "p5", name: "Callow Loft Plant Wall", location: "Brooklyn, NY", category: "Interior" },
-  { id: "p6", name: "Sable & Fern Studio", location: "Seattle, WA", category: "Interior" },
+  {
+    id: "golden-park-estate",
+    name: "Golden Park Estate",
+    location: "Ajah, Lagos",
+    scope: "Design, installation and maintenance",
+    year: "2019",
+    category: "Estate",
+    image: "/images/portfolio/golden-park-estate-ajah.jpg",
+  },
+  {
+    id: "precious-estate",
+    name: "Precious Estate",
+    location: "Ido, Ibadan",
+    scope: "Installation and maintenance",
+    category: "Estate",
+    image: "/images/portfolio/precious-estate-ido-ibadan.jpg",
+  },
+  {
+    id: "adebambo-residence",
+    name: "Adebambo Residence",
+    location: "Eleyele, Ibadan",
+    scope: "Installation and maintenance",
+    year: "2021",
+    category: "Residential",
+    image: "/images/portfolio/adebambo-residence-eleyele-ibadan.jpg",
+  },
+  {
+    id: "urban-homes",
+    name: "Urban Homes",
+    location: "Nigeria",
+    scope: "Design, installation and maintenance",
+    year: "2022",
+    category: "Residential",
+    image: "/images/portfolio/urban-homes.jpg",
+  },
+  {
+    id: "mayfair-gardens-estate",
+    name: "Mayfair Gardens Estate",
+    location: "Nigeria",
+    scope: "Installation and maintenance",
+    year: "2025",
+    category: "Estate",
+  },
+  {
+    id: "smith-hills-schools",
+    name: "Smith Hills Schools",
+    location: "Nigeria",
+    scope: "Design, installation and maintenance",
+    year: "2026",
+    category: "Institutional",
+  },
 ];
 
 export default function ProjectShowcase() {
@@ -95,21 +145,27 @@ export default function ProjectShowcase() {
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] as const }}
               >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-emerald-950/5">
-                  {/* Project image — replace src with a licensed asset before launch */}
-                  <Image
-                    src={`https://picsum.photos/seed/${project.id}/800/600`}
-                    alt={`${project.name} landscape design in ${project.location}`}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
+                <div className="relative aspect-square w-full overflow-hidden rounded-md bg-stone-100">
+                  {project.image ? (
+                    <Image
+                      src={project.image}
+                      alt={`${project.name} landscape project in ${project.location}`}
+                      fill
+                      className="object-contain p-3"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-emerald-950/30">
+                      <GiTreeBranch className="h-8 w-8" aria-hidden="true" />
+                      <span className="text-xs">Photography coming soon</span>
+                    </div>
+                  )}
                 </div>
                 <h3 className="mt-4 font-[family-name:var(--font-fraunces)] text-lg text-emerald-950">
                   {project.name}
                 </h3>
                 <p className="mt-1 text-sm text-emerald-950/60">
-                  {project.category.toLowerCase()} project in {project.location}
+                  {project.scope} in {project.location}
+                  {project.year ? `, ${project.year}` : ""}
                 </p>
               </motion.article>
             ))}

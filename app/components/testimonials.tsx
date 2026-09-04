@@ -1,255 +1,224 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type PanInfo,
+  type Variants,
+} from "framer-motion";
+import { FiChevronLeft, FiChevronRight, FiUser } from "react-icons/fi";
 
-type Testimonial = {
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+const SWIPE_THRESHOLD = 60;
+const AUTOPLAY_INTERVAL_MS = 6500;
+
+type Reference = {
   id: string;
-  quote: string;
   name: string;
-  role: string;
-  project: string;
+  orgOrPosition: string;
+  relationship: string;
 };
 
-const TESTIMONIALS: Testimonial[] = [
+// Sourced from the company profile's reference list. Phone numbers are kept
+// off the public site by design — share them with prospective clients
+// directly during the proposal process instead.
+const REFERENCES: Reference[] = [
   {
-    id: "t1",
-    quote:
-      "Vredezara read our slope and our soil before they ever sketched a plan. Three years on, the garden looks more settled every spring, not more tired.",
-    name: "Marisol Ferreira",
-    role: "Homeowner",
-    project: "Hollow Creek Residence",
+    id: "r1",
+    name: "Mrs Olalekan Oyindamola",
+    orgOrPosition: "F & F Luxe Interior Homes",
+    relationship: "Client",
   },
   {
-    id: "t2",
-    quote:
-      "They treated our lobby planting as architecture, not decoration. Visitors comment on it before they comment on the building.",
-    name: "Daniel Okoye",
-    role: "Facilities Director",
-    project: "Anders & Vale HQ Atrium",
+    id: "r2",
+    name: "Mrs Adesanya",
+    orgOrPosition: "Pastor, RCCG",
+    relationship: "Client",
   },
   {
-    id: "t3",
-    quote:
-      "The stewardship team knows our courtyard better than we do at this point. Nothing gets missed between seasons.",
-    name: "Priya Chandrasekhar",
-    role: "Property Manager",
-    project: "Marlowe Terrace Courtyard",
-  },
-  {
-    id: "t4",
-    quote:
-      "Our loft had two dead corners for years. Vredezara turned one into the first thing every guest photographs.",
-    name: "Sam Whitfield",
-    role: "Homeowner",
-    project: "Callow Loft Plant Wall",
-  },
-  {
-    id: "t5",
-    quote:
-      "Guests now ask to walk the grounds before they ask about the rooms. That's a first for us in twelve years of operating this property.",
-    name: "Helena Roost",
-    role: "General Manager",
-    project: "Birchgate Hotel Grounds",
-  },
-  {
-    id: "t6",
-    quote:
-      "What sold us was how little they asked us to compromise on maintenance. The plan was ambitious and still practical to keep up.",
-    name: "Owen Castellanos",
-    role: "Studio Founder",
-    project: "Sable & Fern Studio",
+    id: "r3",
+    name: "Mrs Sadiku",
+    orgOrPosition: "Afolake and Sons Agro Ltd",
+    relationship: "Client, Mayfair Gardens Estate",
   },
 ];
 
+const TOTAL = REFERENCES.length;
+
 export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [[index, direction], setSlide] = useState<[number, number]>([0, 0]);
   const [isPaused, setIsPaused] = useState(false);
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
-  const total = TESTIMONIALS.length;
+  const paginate = useCallback((step: number) => {
+    setSlide(([current]) => [(current + step + TOTAL) % TOTAL, step]);
+  }, []);
 
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % total);
-  }, [total]);
+  const goTo = useCallback((target: number) => {
+    setSlide(([current]) => [target, target > current ? 1 : -1]);
+  }, []);
 
-  const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + total) % total);
-  }, [total]);
-
-  // Infinite auto-scroll timer (advances every 8 seconds)
   useEffect(() => {
-    if (isPaused) return;
-
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % total);
-    }, 8000);
-
+    if (isPaused || prefersReducedMotion || TOTAL <= 1) return;
+    const timer = setInterval(() => paginate(1), AUTOPLAY_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, [isPaused, total]);
+  }, [isPaused, prefersReducedMotion, paginate]);
 
-  // Touch handlers for mobile swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
+  const handleDragEnd = (
+    _event: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo
+  ) => {
+    if (info.offset.x < -SWIPE_THRESHOLD) paginate(1);
+    else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
+  const slideVariants: Variants = {
+    enter: (dir: number) => ({
+      opacity: 0,
+      x: prefersReducedMotion ? 0 : dir > 0 ? 48 : -48,
+    }),
+    center: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.45, ease: EASE_OUT },
+    },
+    exit: (dir: number) => ({
+      opacity: 0,
+      x: prefersReducedMotion ? 0 : dir > 0 ? -48 : 48,
+      transition: { duration: 0.3, ease: EASE_OUT },
+    }),
   };
 
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 40;
-
-    if (distance > minSwipeDistance) {
-      nextSlide();
-    } else if (distance < -minSwipeDistance) {
-      prevSlide();
-    }
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
-
-  // Wrap indices for circular left/active/right calculation
-  const prev = (currentIndex - 1 + total) % total;
-  const next = (currentIndex + 1) % total;
+  const active = REFERENCES[index];
 
   return (
     <section
       id="testimonials"
       aria-labelledby="testimonials-heading"
-      className="w-full overflow-hidden bg-stone-50 px-4 py-20 md:px-8 md:py-28 lg:px-16"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      className="w-full bg-stone-50 px-4 py-20 md:px-8 md:py-28 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
-        <div className="max-w-2xl text-center md:text-left">
+        <div className="max-w-2xl">
           <h2
             id="testimonials-heading"
             className="font-[family-name:var(--font-fraunces)] text-2xl text-emerald-950 md:text-4xl"
           >
-            From the gardens we've kept
+            Trusted by estates, homes and institutions
           </h2>
           <p className="mt-4 text-emerald-950/70 md:text-lg">
-            A few words from the people who live with, work in, and manage the spaces we've designed.
+            A few of the clients who can speak to our work firsthand. Full
+            contact details are shared with prospective clients on request
+            during the proposal process.
           </p>
         </div>
 
-        {/* Carousel Container */}
         <div
-          className="relative mt-12 flex items-center justify-center min-h-[420px] md:min-h-[380px] touch-pan-y select-none"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          className="relative mx-auto mt-14 max-w-xl"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
         >
-          {/* Previous Slide (Faded Left) */}
-          <div
-            onClick={prevSlide}
-            className="absolute left-0 z-0 hidden w-[30%] -translate-x-12 scale-90 opacity-40 transition-all duration-700 hover:cursor-pointer md:block lg:w-[35%] lg:-translate-x-16"
+          <button
+            type="button"
+            onClick={() => paginate(-1)}
+            aria-label="Previous reference"
+            className="absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-x-[130%] -translate-y-1/2 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 shadow-sm transition-colors hover:bg-emerald-50 md:flex"
           >
-            <TestimonialCard testimonial={TESTIMONIALS[prev]} isActive={false} />
-          </div>
+            <FiChevronLeft size={20} />
+          </button>
+          <button
+            type="button"
+            onClick={() => paginate(1)}
+            aria-label="Next reference"
+            className="absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 translate-x-[130%] items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 shadow-sm transition-colors hover:bg-emerald-50 md:flex"
+          >
+            <FiChevronRight size={20} />
+          </button>
 
-          {/* Active Center Slide (8s Slow Zoom-In Animation) */}
-          <div className="z-10 w-full max-w-md md:max-w-lg lg:max-w-xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={TESTIMONIALS[currentIndex].id}
-                initial={{ opacity: 0, scale: 1 }}
-                animate={{
-                  opacity: 1,
-                  scale: 1.06,
-                  transition: {
-                    opacity: { duration: 0.4 },
-                    scale: { duration: 8, ease: "linear" }, // Slow zoom-in over 8 seconds
-                  },
-                }}
-                exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.3 } }}
+          <div
+            className="overflow-hidden"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Client references"
+          >
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.article
+                key={active.id}
+                custom={direction}
+                variants={slideVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.65}
+                onDragEnd={handleDragEnd}
+                aria-live="polite"
+                className="cursor-grab rounded-2xl border border-emerald-950/10 bg-white p-8 text-center active:cursor-grabbing sm:p-10"
               >
-                <TestimonialCard testimonial={TESTIMONIALS[currentIndex]} isActive={true} />
-              </motion.div>
+                <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                  <FiUser aria-hidden="true" size={24} />
+                </span>
+
+                <p className="mt-5 font-[family-name:var(--font-fraunces)] text-xl text-emerald-950">
+                  {active.name}
+                </p>
+                <p className="mt-1 text-sm text-emerald-950/60">
+                  {active.orgOrPosition}
+                </p>
+
+                <span className="mt-4 inline-block rounded-full bg-emerald-700/10 px-3 py-1 text-xs font-medium text-emerald-700">
+                  {active.relationship}
+                </span>
+              </motion.article>
             </AnimatePresence>
           </div>
 
-          {/* Next Slide (Faded Right) */}
-          <div
-            onClick={nextSlide}
-            className="absolute right-0 z-0 hidden w-[30%] translate-x-12 scale-90 opacity-40 transition-all duration-700 hover:cursor-pointer md:block lg:w-[35%] lg:translate-x-16"
-          >
-            <TestimonialCard testimonial={TESTIMONIALS[next]} isActive={false} />
+          <div className="mt-7 flex items-center justify-center gap-5">
+            <button
+              type="button"
+              onClick={() => paginate(-1)}
+              aria-label="Previous reference"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 transition-colors hover:bg-emerald-50 md:hidden"
+            >
+              <FiChevronLeft size={16} />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {REFERENCES.map((reference, i) => (
+                <button
+                  key={reference.id}
+                  type="button"
+                  onClick={() => goTo(i)}
+                  aria-label={`Go to reference ${i + 1} of ${TOTAL}`}
+                  aria-current={i === index}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === index
+                      ? "w-6 bg-emerald-700"
+                      : "w-2 bg-emerald-950/20 hover:bg-emerald-950/40"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => paginate(1)}
+              aria-label="Next reference"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 transition-colors hover:bg-emerald-50 md:hidden"
+            >
+              <FiChevronRight size={16} />
+            </button>
           </div>
-        </div>
 
-        {/* Navigation & Dots */}
-        <div className="mt-8 flex items-center justify-center gap-6">
-          <button
-            onClick={prevSlide}
-            aria-label="Previous testimonial"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-950/20 text-emerald-950 transition-colors hover:bg-emerald-950 hover:text-white"
-          >
-            <FaChevronLeft className="h-3.5 w-3.5" />
-          </button>
-
-          <div className="flex gap-2">
-            {TESTIMONIALS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setCurrentIndex(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === currentIndex ? "w-8 bg-emerald-900" : "w-2 bg-emerald-950/20"
-                }`}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={nextSlide}
-            aria-label="Next testimonial"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-emerald-950/20 text-emerald-950 transition-colors hover:bg-emerald-950 hover:text-white"
-          >
-            <FaChevronRight className="h-3.5 w-3.5" />
-          </button>
+          <p className="mt-3 text-center text-xs text-emerald-950/40 md:hidden">
+            Swipe or use the arrows to browse
+          </p>
         </div>
       </div>
     </section>
-  );
-}
-
-function TestimonialCard({
-  testimonial,
-  isActive,
-}: {
-  testimonial: Testimonial;
-  isActive: boolean;
-}) {
-  return (
-    <div
-      className={`flex flex-col justify-between rounded-2xl border border-emerald-950/10 bg-white p-6 transition-shadow duration-300 sm:p-8 ${
-        isActive ? "shadow-xl ring-1 ring-emerald-950/5" : "shadow-sm"
-      }`}
-    >
-      <div>
-        <div className="flex gap-0.5" aria-hidden="true">
-          {Array.from({ length: 5 }).map((_, starIndex) => (
-            <FaStar key={starIndex} className="h-3.5 w-3.5 text-emerald-700" />
-          ))}
-        </div>
-
-        <p className="mt-4 font-[family-name:var(--font-fraunces)] text-base italic leading-relaxed text-emerald-950 sm:text-lg lg:text-xl">
-          &ldquo;{testimonial.quote}&rdquo;
-        </p>
-      </div>
-
-      <div className="mt-6 border-t border-emerald-950/10 pt-4">
-        <p className="text-sm font-semibold text-emerald-950">{testimonial.name}</p>
-        <p className="mt-0.5 text-xs text-emerald-950/60">
-          {testimonial.role}, {testimonial.project}
-        </p>
-      </div>
-    </div>
   );
 }

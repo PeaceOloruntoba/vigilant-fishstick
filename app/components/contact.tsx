@@ -2,30 +2,40 @@
 
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
+import { FiMail, FiPhone, FiMapPin, FiMessageCircle } from "react-icons/fi";
 
 const CONTACT_DETAILS = [
   {
     icon: FiMapPin,
-    label: "Studio",
-    value: "412 Arbor Lane, Suite 3, Portland, OR 97209",
+    label: "Office",
+    value: "1, Nurudeen Dali Street, Ogombo, Ajah, Lagos State, Nigeria",
   },
   {
     icon: FiMail,
     label: "Email",
-    value: "studio@vredezara.com",
+    value: "landfairyproperties@gmail.com",
+    href: "mailto:landfairyproperties@gmail.com",
   },
   {
     icon: FiPhone,
     label: "Phone",
-    value: "+1 (503) 555-0148",
+    value: "+234 816 041 2420",
+    href: "tel:+2348160412420",
+  },
+  {
+    icon: FiMessageCircle,
+    label: "WhatsApp",
+    value: "Chat with us directly",
+    href: "https://wa.me/2348160412420",
   },
 ];
 
 const SERVICE_OPTIONS = [
-  "Landscape Architecture",
-  "Biophilic Indoor Styling",
-  "Premium Garden Stewardship",
+  "Planning & Design",
+  "Property Maintenance",
+  "Soft & Hard Scape Installation",
+  "Irrigation System Design",
+  "Property Development & Handover",
   "Not sure yet",
 ];
 
@@ -52,7 +62,7 @@ export default function Contact() {
           id="contact-heading"
           className="font-[family-name:var(--font-fraunces)] text-2xl text-emerald-950 md:text-4xl"
         >
-          Start a conversation about your space
+          Start a conversation about your grounds
         </h2>
 
         <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
@@ -65,12 +75,12 @@ export default function Contact() {
             className="md:col-span-4"
           >
             <p className="text-emerald-950/70">
-              Tell us about the site, and we'll arrange a walk-through with
-              one of our lead designers within a week.
+              Tell us about the site, and our team will arrange a
+              walk-through with one of our project supervisors.
             </p>
 
             <ul className="mt-8 flex flex-col gap-6">
-              {CONTACT_DETAILS.map(({ icon: Icon, label, value }) => (
+              {CONTACT_DETAILS.map(({ icon: Icon, label, value, href }) => (
                 <li key={label} className="flex items-start gap-3">
                   <Icon
                     aria-hidden="true"
@@ -78,7 +88,18 @@ export default function Contact() {
                   />
                   <div>
                     <p className="text-xs text-emerald-950/50">{label}</p>
-                    <p className="text-sm text-emerald-950">{value}</p>
+                    {href ? (
+                      <a
+                        href={href}
+                        target={href.startsWith("http") ? "_blank" : undefined}
+                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        className="text-sm text-emerald-950 underline-offset-2 transition-colors hover:text-emerald-700 hover:underline"
+                      >
+                        {value}
+                      </a>
+                    ) : (
+                      <p className="text-sm text-emerald-950">{value}</p>
+                    )}
                   </div>
                 </li>
               ))}
@@ -99,10 +120,11 @@ export default function Contact() {
                 className="rounded-md border border-emerald-700/30 bg-emerald-50 px-6 py-8 text-emerald-950"
               >
                 <p className="font-[family-name:var(--font-fraunces)] text-lg">
-                  Thank you — your note has reached us.
+                  Thank you — your request has reached us.
                 </p>
                 <p className="mt-2 text-sm text-emerald-950/70">
-                  A designer will follow up at the email address you shared.
+                  A member of the team will follow up at the email address
+                  you shared.
                 </p>
               </div>
             ) : (
@@ -121,7 +143,7 @@ export default function Contact() {
                     autoComplete="name"
                     required
                     className={inputClasses}
-                    placeholder="Jordan Ashworth"
+                    placeholder="Adaeze Okafor"
                   />
                 </div>
 
@@ -139,7 +161,7 @@ export default function Contact() {
                     autoComplete="email"
                     required
                     className={inputClasses}
-                    placeholder="jordan@example.com"
+                    placeholder="adaeze@example.com"
                   />
                 </div>
 
@@ -190,7 +212,7 @@ export default function Contact() {
                     type="submit"
                     className="w-full rounded-full bg-emerald-700 px-7 py-3.5 text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 sm:w-auto"
                   >
-                    Send consultation request
+                    Send quote request
                   </button>
                 </div>
               </form>

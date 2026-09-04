@@ -3,9 +3,9 @@ import Hero from "./components/hero";
 import Services from "./components/services";
 import Editorial from "./components/editorial";
 import ProjectShowcase from "./components/project_showcase";
+import Testimonials from "./components/testimonials";
 import Contact from "./components/contact";
 import Footer from "./components/footer";
-import Testimonials from "./components/testimonials";
 
 export default function Home() {
   return (

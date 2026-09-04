@@ -3,6 +3,16 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+const CORE_VALUES = [
+  "Professionalism",
+  "Sustainability",
+  "Reliability",
+  "Quality Craftsmanship",
+  "Client Partnership",
+];
+
 export default function Editorial() {
   return (
     <section
@@ -15,43 +25,52 @@ export default function Editorial() {
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
+          transition={{ duration: 0.7, ease: EASE_OUT }}
           className="md:col-span-5"
         >
           <h2
             id="philosophy-heading"
             className="font-[family-name:var(--font-fraunces)] text-2xl italic leading-snug text-stone-50 md:text-4xl"
           >
-            A garden is a practice, not a purchase
+            Every landscape is treated as a living asset
           </h2>
           <p className="mt-6 max-w-md text-stone-200/85">
-            We design for the soil we're given, not against it. Native and
-            climate-adapted planting, closed-loop irrigation, and materials
-            sourced within the region are the baseline of every proposal we
-            write, not an upgrade tier.
+            Our vision is to be the leading landscape and horticulture
+            company in Nigeria, recognised for transforming outdoor spaces
+            into sustainable, healthy and beautiful environments.
           </p>
           <p className="mt-4 max-w-md text-stone-200/85">
-            The result is a landscape that asks less of its owner over time:
-            less water, less replacement, less maintenance debt. What it asks
-            for instead is attention, which is where our stewardship work
-            begins.
+            We design for climate, soil and use, install with attention to
+            long-term performance, and maintain on a schedule that protects
+            the client's investment year after year — one accountable
+            partner across the full lifecycle, not a chain of contractors.
           </p>
+
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
+            {CORE_VALUES.map((value) => (
+              <li
+                key={value}
+                className="text-xs uppercase tracking-wide text-emerald-300/80"
+              >
+                {value}
+              </li>
+            ))}
+          </ul>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.97 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] as const }}
-          className="relative aspect-[4/5] w-full overflow-hidden md:col-span-7 md:aspect-[16/11]"
+          transition={{ duration: 0.7, ease: EASE_OUT }}
+          className="relative aspect-[4/5] w-full overflow-hidden rounded-md md:col-span-7 md:aspect-[16/11]"
         >
-          {/* Editorial image — replace src with a licensed asset before launch */}
+          {/* Real Landfairy site photography, extracted from the company profile */}
           <Image
-            src="https://www.ggmlandscaping.co.uk/wp-content/uploads/2025/08/Urban-Courtyard-Garden-Style.png"
-            alt="Close, architectural view of a sustainably designed garden courtyard"
+            src="/images/editorial/garden-walkway.jpg"
+            alt="Brick-edged planting bed with palm feature installed by Landfairy Global Investment Ltd"
             fill
-            unoptimized
-            className="object-cover rounded-md"
+            className="object-cover object-top"
           />
         </motion.div>
       </div>

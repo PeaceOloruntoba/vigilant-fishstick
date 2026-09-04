@@ -7,8 +7,9 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 const NAV_LINKS = [
   { label: "Services", href: "#services" },
-  { label: "Philosophy", href: "#philosophy" },
+  { label: "About", href: "#philosophy" },
   { label: "Projects", href: "#projects" },
+  { label: "References", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -19,25 +20,22 @@ export default function Navigation() {
     <header className="sticky top-0 z-50 w-full border-b border-stone-900/5 bg-white/70 backdrop-blur-md">
       <nav
         aria-label="Primary"
-        className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 md:px-8 lg:px-16"
+        className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8 lg:px-16"
       >
-        <a
-          href="#top"
-          className="flex items-center gap-3 font-[family-name:var(--font-fraunces)] text-xl tracking-wide text-emerald-950 md:text-2xl"
-        >
+        <a href="#top" aria-label="Landfairy Global Investment Ltd home" className="flex items-center">
+          {/* Placeholder mark — swap /public/logo.png for the client's real logo file */}
           <Image
             src="/logo.png"
-            alt="Vredezara Logo"
-            width={36}
-            height={36}
-            className="h-8 w-auto object-contain md:h-9"
+            alt="Landfairy Global Investment Ltd"
+            width={180}
+            height={48}
             priority
+            className="h-8 w-auto object-contain md:h-9"
           />
-          <span>vredezara</span>
         </a>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-10 md:flex">
+        <ul className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.href}>
               <a
@@ -54,7 +52,7 @@ export default function Navigation() {
           href="#contact"
           className="hidden rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 md:inline-block"
         >
-          Book Consultation
+          Request a Quote
         </a>
 
         {/* Mobile toggle */}
@@ -99,7 +97,7 @@ export default function Navigation() {
                   onClick={() => setIsOpen(false)}
                   className="block rounded-full bg-emerald-700 px-5 py-3 text-center text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800"
                 >
-                  Book Consultation
+                  Request a Quote
                 </a>
               </li>
             </ul>
