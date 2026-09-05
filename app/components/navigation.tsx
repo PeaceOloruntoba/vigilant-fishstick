@@ -23,14 +23,13 @@ export default function Navigation() {
         className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8 lg:px-16"
       >
         <a href="#top" aria-label="Landfairy Global Investment Ltd home" className="flex items-center">
-          {/* Placeholder mark — swap /public/logo.png for the client's real logo file */}
           <Image
             src="/logo.png"
-            alt="Landfairy Global Investment Ltd"
-            width={180}
-            height={48}
+            alt="Landfairy Global Investment Ltd — horticulture and landscaping"
+            width={200}
+            height={200}
             priority
-            className="h-8 w-auto object-contain md:h-9"
+            className="h-16 w-16 object-contain md:h-20 md:w-20"
           />
         </a>
 

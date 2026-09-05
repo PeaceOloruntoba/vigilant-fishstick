@@ -18,7 +18,12 @@ type Project = {
   image?: string;
 };
 
-const CATEGORIES: Category[] = ["All", "Estate", "Residential", "Institutional"];
+const CATEGORIES: Category[] = [
+  "All",
+  "Estate",
+  "Residential",
+  "Institutional",
+];
 
 const PROJECTS: Project[] = [
   {
@@ -82,7 +87,7 @@ export default function ProjectShowcase() {
       active === "All"
         ? PROJECTS
         : PROJECTS.filter((project) => project.category === active),
-    [active]
+    [active],
   );
 
   return (
@@ -123,7 +128,11 @@ export default function ProjectShowcase() {
                   {isActive && (
                     <motion.span
                       layoutId="active-category-pill"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 350,
+                        damping: 30,
+                      }}
                       className="absolute inset-0 rounded-full bg-emerald-700"
                     />
                   )}
@@ -143,7 +152,10 @@ export default function ProjectShowcase() {
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] as const }}
+                transition={{
+                  duration: 0.35,
+                  ease: [0.22, 1, 0.36, 1] as const,
+                }}
               >
                 <div className="relative aspect-square w-full overflow-hidden rounded-md bg-stone-100">
                   {project.image ? (

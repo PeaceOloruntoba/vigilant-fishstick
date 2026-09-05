@@ -68,7 +68,7 @@ export default function Testimonials() {
 
   const handleDragEnd = (
     _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
+    info: PanInfo,
   ) => {
     if (info.offset.x < -SWIPE_THRESHOLD) paginate(1);
     else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1);

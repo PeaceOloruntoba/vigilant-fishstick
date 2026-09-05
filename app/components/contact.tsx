@@ -75,8 +75,8 @@ export default function Contact() {
             className="md:col-span-4"
           >
             <p className="text-emerald-950/70">
-              Tell us about the site, and our team will arrange a
-              walk-through with one of our project supervisors.
+              Tell us about the site, and our team will arrange a walk-through
+              with one of our project supervisors.
             </p>
 
             <ul className="mt-8 flex flex-col gap-6">
@@ -92,7 +92,11 @@ export default function Contact() {
                       <a
                         href={href}
                         target={href.startsWith("http") ? "_blank" : undefined}
-                        rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        rel={
+                          href.startsWith("http")
+                            ? "noopener noreferrer"
+                            : undefined
+                        }
                         className="text-sm text-emerald-950 underline-offset-2 transition-colors hover:text-emerald-700 hover:underline"
                       >
                         {value}
@@ -111,7 +115,11 @@ export default function Contact() {
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] as const }}
+            transition={{
+              duration: 0.6,
+              delay: 0.1,
+              ease: [0.22, 1, 0.36, 1] as const,
+            }}
             className="md:col-span-8"
           >
             {submitted ? (
@@ -123,12 +131,16 @@ export default function Contact() {
                   Thank you — your request has reached us.
                 </p>
                 <p className="mt-2 text-sm text-emerald-950/70">
-                  A member of the team will follow up at the email address
-                  you shared.
+                  A member of the team will follow up at the email address you
+                  shared.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                className="grid grid-cols-1 gap-5 sm:grid-cols-2"
+              >
                 <div className="sm:col-span-1">
                   <label
                     htmlFor="fullName"

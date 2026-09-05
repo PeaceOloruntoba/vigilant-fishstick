@@ -71,9 +71,9 @@ export default function Hero() {
             className="mt-6 max-w-xl text-base text-stone-200 md:text-lg"
           >
             Landfairy Global Investment Ltd (RC 8189342) plans, installs and
-            maintains landscapes for corporate, residential, institutional
-            and government clients across Nigeria — treating every project
-            as a living asset from first design to long-term stewardship.
+            maintains landscapes for corporate, residential, institutional and
+            government clients across Nigeria — treating every project as a
+            living asset from first design to long-term stewardship.
           </motion.p>
 
           <motion.div
