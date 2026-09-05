@@ -67,7 +67,7 @@ export default function Editorial() {
         >
           {/* Real Landfairy site photography, extracted from the company profile */}
           <Image
-            src="https://www.ggmlandscaping.co.uk/wp-content/uploads/2025/08/Urban-Courtyard-Garden-Style.png"
+            src="/images/garden-walkway.png"
             alt="Brick-edged planting bed with palm feature installed by Landfairy Global Investment Ltd"
             fill
             className="object-cover object-top"
