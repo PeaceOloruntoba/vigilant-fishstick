@@ -40,12 +40,52 @@ const SERVICE_OPTIONS = [
 ];
 
 export default function Contact() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Wire this up to your form handler / API route.
-    setSubmitted(true);
+    setStatus("loading");
+    setErrorMessage("");
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      fullName: data.get("fullName") as string,
+      email: data.get("email") as string,
+      serviceType: data.get("serviceType") as string,
+      projectVision: data.get("projectVision") as string,
+      // Honeypot — left empty by real visitors, filled in by most bots.
+      company: data.get("company") as string,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        setErrorMessage(
+          result.error ||
+            "Couldn't send your message. Please try again shortly.",
+        );
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setErrorMessage(
+        "Couldn't reach the server. Please check your connection and try again.",
+      );
+      setStatus("error");
+    }
   };
 
   const inputClasses =
@@ -122,7 +162,7 @@ export default function Contact() {
             }}
             className="md:col-span-8"
           >
-            {submitted ? (
+            {status === "success" ? (
               <div
                 role="status"
                 className="rounded-md border border-emerald-700/30 bg-emerald-50 px-6 py-8 text-emerald-950"
@@ -141,6 +181,17 @@ export default function Contact() {
                 noValidate
                 className="grid grid-cols-1 gap-5 sm:grid-cols-2"
               >
+                {/* Honeypot — hidden from real visitors via CSS, left empty by them */}
+                <div className="hidden" aria-hidden="true">
+                  <label htmlFor="company">Company</label>
+                  <input
+                    id="company"
+                    name="company"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
                 <div className="sm:col-span-1">
                   <label
                     htmlFor="fullName"
@@ -220,11 +271,20 @@ export default function Contact() {
                 </div>
 
                 <div className="sm:col-span-2">
+                  {status === "error" && (
+                    <p
+                      role="alert"
+                      className="mb-4 rounded-md border border-red-700/20 bg-red-50 px-4 py-3 text-sm text-red-800"
+                    >
+                      {errorMessage}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="w-full rounded-full bg-emerald-700 px-7 py-3.5 text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 sm:w-auto"
+                    disabled={status === "loading"}
+                    className="w-full rounded-full bg-emerald-700 px-7 py-3.5 text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
-                    Send quote request
+                    {status === "loading" ? "Sending…" : "Send quote request"}
                   </button>
                 </div>
               </form>
