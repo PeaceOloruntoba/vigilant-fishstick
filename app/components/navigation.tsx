@@ -22,15 +22,27 @@ export default function Navigation() {
         aria-label="Primary"
         className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8 lg:px-16"
       >
-        <a href="#top" aria-label="Landfairy Global Investment Ltd home" className="flex items-center">
+        <a
+          href="#top"
+          aria-label="Landfairy Global Investment Ltd home"
+          className="flex items-center gap-2"
+        >
           <Image
             src="/logo.png"
-            alt="Landfairy Global Investment Ltd — horticulture and landscaping"
-            width={200}
-            height={200}
+            alt=""
+            width={910}
+            height={210}
             priority
-            className="h-16 w-16 object-contain md:h-20 md:w-20"
+            className="h-9 w-auto object-contain md:h-11"
           />
+          <span className="flex flex-col leading-none">
+            <span className="font-[family-name:var(--font-fraunces)] text-lg text-emerald-950 md:text-xl">
+              Landfairy
+            </span>
+            <span className="text-[10px] uppercase tracking-wider text-emerald-700 md:text-xs">
+              Global Investment Ltd
+            </span>
+          </span>
         </a>
 
         {/* Desktop links */}

@@ -43,20 +43,28 @@ based on the two company-profile PDFs supplied by the client.
 
 ## Image sourcing (what's real vs. placeholder)
 
+Real site photos and a walkthrough video (WhatsApp media, dated Sept 2026)
+of an actual Landfairy project — a corporate rooftop garden in Lagos —
+replaced the earlier PDF-extracted images:
+
 | File | Source | Used for |
 |---|---|---|
+| `hero/hero-background.jpg` | Real rooftop garden photo (WA0045) | Hero background |
+| `editorial/garden-walkway.jpg` | Real rooftop garden photo (WA0043) | About section image (replaces the earlier low-res PDF extract the client flagged) |
+| `portfolio/rooftop-garden-1.jpg`, `-2.jpg`, `-3.jpg` | Real rooftop garden photos (WA0043–45) | Corporate Rooftop Garden project card (3-photo gallery + video) |
+| `videos/rooftop-garden-walkthrough.mp4` | Real walkthrough video, re-encoded from 20MB to ~16MB for the web (h.264, capped bitrate, `faststart`) | Click-to-play video on the Corporate Rooftop Garden card (poster image, not autoplay — a 3-minute video autoplaying would waste data on mobile) |
 | `portfolio/golden-park-estate-ajah.jpg` | PDF photo, captioned "Golden Park estate Ajah" | Golden Park Estate project card |
 | `portfolio/precious-estate-ido-ibadan.jpg` | PDF photo, captioned "Precious estate, Ido, Ibadan" | Precious Estate project card |
 | `portfolio/adebambo-residence-eleyele-ibadan.jpg` | PDF photo, captioned "Adebambo residence, Eleyele, Ibadan" | Adebambo Residence project card |
-| `portfolio/urban-homes.jpg` | PDF photo (uncaptioned estate road, grouped near the Adebambo photos) | Urban Homes project card — illustrative, not a confirmed 1:1 match |
-| `editorial/garden-walkway.jpg` | PDF photo carrying a small "LL" watermark — the one clearly Landfairy's own photography | About section image |
-| `hero/hero-background.jpg` | PDF photo (unwatermarked, generic garden stock) | Hero background |
+| `portfolio/urban-homes.jpg` | PDF photo (uncaptioned estate road) | Urban Homes project card — illustrative, not a confirmed 1:1 match |
 
 Two named projects — **Mayfair Gardens Estate** and **Smith Hills
-Schools** — had no matching photo in either PDF, so their cards render an
-honest "Photography coming soon" placeholder instead of a mismatched
-image. Two other PDF images (a square perennial-border shot in each file)
-were dropped as redundant, generic stock photography.
+Schools** — still have no photo of their own, so each now reuses one of
+the new rooftop-garden photos as a stand-in (`illustrative: true` on the
+`Project` object in `project_showcase.tsx`) rather than showing a bare
+placeholder. This is a deliberate tradeoff for visual completeness, not a
+claim that photo is literally that project — swap in the real photo for
+either as soon as it's available.
 
 ## A deliberate choice on Testimonials
 
@@ -133,4 +141,3 @@ small, contained change — everything else stays the same.
    cards would help — the extracted PDF images are usable but modest
    cards would help — the extracted PDF images are usable but modest
    resolution (largest is ~1060px wide).
-   

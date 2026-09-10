@@ -30,11 +30,10 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-[92vh] w-full items-end overflow-hidden md:min-h-screen"
     >
-      {/* Background — extracted from the company profile; swap for higher-resolution
-          photography (1920px+ wide) when available. */}
+      {/* Corporate rooftop garden project, Lagos — real Landfairy site photography */}
       <Image
         src="/images/hero/hero-background.jpg"
-        alt="Layered flower border and lawn maintained by Landfairy Global Investment Ltd"
+        alt="Rooftop garden landscaped by Landfairy Global Investment Ltd overlooking Lagos, Nigeria"
         fill
         priority
         className="object-cover object-center"
@@ -71,9 +70,9 @@ export default function Hero() {
             className="mt-6 max-w-xl text-base text-stone-200 md:text-lg"
           >
             Landfairy Global Investment Ltd (RC 8189342) plans, installs and
-            maintains landscapes for corporate, residential, institutional and
-            government clients across Nigeria — treating every project as a
-            living asset from first design to long-term stewardship.
+            maintains landscapes for corporate, residential, institutional
+            and government clients across Nigeria — treating every project
+            as a living asset from first design to long-term stewardship.
           </motion.p>
 
           <motion.div

@@ -16,13 +16,18 @@ export default function Footer() {
     <footer className="w-full border-t border-stone-900/10 bg-stone-50 px-4 py-12 md:px-8 lg:px-16">
       <div className="mx-auto flex max-w-6xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
         <div>
-          <Image
-            src="/logo.png"
-            alt="Landfairy Global Investment Ltd — horticulture and landscaping"
-            width={200}
-            height={200}
-            className="h-16 w-16 object-contain"
-          />
+          <div className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt=""
+              width={910}
+              height={210}
+              className="h-8 w-auto object-contain"
+            />
+            <span className="font-[family-name:var(--font-fraunces)] text-base text-emerald-950">
+              Landfairy
+            </span>
+          </div>
           <p className="mt-2 text-sm text-emerald-950/60">
             Cultivating Landscapes. Growing Value.
           </p>
@@ -80,8 +85,7 @@ export default function Footer() {
           &copy; {year} Landfairy Global Investment Ltd. All rights reserved.
         </p>
         <p className="text-xs text-emerald-950/50">
-          RC 8189342 — Registered with the Corporate Affairs Commission (CAC),
-          Nigeria
+          RC 8189342 — Registered with the Corporate Affairs Commission (CAC), Nigeria
         </p>
       </div>
     </footer>

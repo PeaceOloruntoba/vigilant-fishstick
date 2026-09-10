@@ -35,15 +35,15 @@ export default function Editorial() {
             Every landscape is treated as a living asset
           </h2>
           <p className="mt-6 max-w-md text-stone-200/85">
-            Our vision is to be the leading landscape and horticulture company
-            in Nigeria, recognised for transforming outdoor spaces into
-            sustainable, healthy and beautiful environments.
+            Our vision is to be the leading landscape and horticulture
+            company in Nigeria, recognised for transforming outdoor spaces
+            into sustainable, healthy and beautiful environments.
           </p>
           <p className="mt-4 max-w-md text-stone-200/85">
             We design for climate, soil and use, install with attention to
-            long-term performance, and maintain on a schedule that protects the
-            client's investment year after year — one accountable partner across
-            the full lifecycle, not a chain of contractors.
+            long-term performance, and maintain on a schedule that protects
+            the client's investment year after year — one accountable
+            partner across the full lifecycle, not a chain of contractors.
           </p>
 
           <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2">
@@ -65,10 +65,10 @@ export default function Editorial() {
           transition={{ duration: 0.7, ease: EASE_OUT }}
           className="relative aspect-[4/5] w-full overflow-hidden rounded-md md:col-span-7 md:aspect-[16/11]"
         >
-          {/* Real Landfairy site photography, extracted from the company profile */}
+          {/* Corporate rooftop garden project, Lagos — real Landfairy site photography */}
           <Image
-            src="/images/editorial/garden-walkway.png"
-            alt="Brick-edged planting bed with palm feature installed by Landfairy Global Investment Ltd"
+            src="/images/editorial/garden-walkway.jpg"
+            alt="Hexagonal planters and gravel walkway on a Landfairy-designed rooftop garden in Lagos"
             fill
             className="object-cover object-top"
           />
