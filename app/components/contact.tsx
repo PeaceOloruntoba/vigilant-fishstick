@@ -40,9 +40,9 @@ const SERVICE_OPTIONS = [
 ];
 
 export default function Contact() {
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
+    "idle"
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -71,8 +71,7 @@ export default function Contact() {
 
       if (!response.ok || !result.ok) {
         setErrorMessage(
-          result.error ||
-            "Couldn't send your message. Please try again shortly.",
+          result.error || "Couldn't send your message. Please try again shortly."
         );
         setStatus("error");
         return;
@@ -81,9 +80,7 @@ export default function Contact() {
       setStatus("success");
       form.reset();
     } catch {
-      setErrorMessage(
-        "Couldn't reach the server. Please check your connection and try again.",
-      );
+      setErrorMessage("Couldn't reach the server. Please check your connection and try again.");
       setStatus("error");
     }
   };

@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json(
       { ok: false, error: "Invalid request body." },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -34,22 +34,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  if (
-    !fullName?.trim() ||
-    !email?.trim() ||
-    !serviceType?.trim() ||
-    !projectVision?.trim()
-  ) {
+  if (!fullName?.trim() || !email?.trim() || !serviceType?.trim() || !projectVision?.trim()) {
     return NextResponse.json(
       { ok: false, error: "Please fill in every field." },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (!EMAIL_RE.test(email.trim())) {
     return NextResponse.json(
       { ok: false, error: "Please provide a valid email address." },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -64,17 +59,11 @@ export async function POST(request: Request) {
     CONTACT_TO_EMAIL,
   } = process.env;
 
-  if (
-    !SMTP_HOST ||
-    !SMTP_PORT ||
-    !SMTP_USER ||
-    !SMTP_PASS ||
-    !SMTP_FROM_EMAIL
-  ) {
+  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !SMTP_FROM_EMAIL) {
     console.error("Contact form: missing SMTP environment variables.");
     return NextResponse.json(
       { ok: false, error: "Email is not configured on the server yet." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -119,11 +108,8 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Contact form send failed:", error);
     return NextResponse.json(
-      {
-        ok: false,
-        error: "Couldn't send your message. Please try again shortly.",
-      },
-      { status: 502 },
+      { ok: false, error: "Couldn't send your message. Please try again shortly." },
+      { status: 502 }
     );
   }
 }

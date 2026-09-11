@@ -65,12 +65,13 @@ export default function Editorial() {
           transition={{ duration: 0.7, ease: EASE_OUT }}
           className="relative aspect-[4/5] w-full overflow-hidden rounded-md md:col-span-7 md:aspect-[16/11]"
         >
-          {/* Corporate rooftop garden project, Lagos — real Landfairy site photography */}
+          {/* Golden Park Estate, Ajah — real Landfairy site photography (cropped
+              from the project's before/after comparison photo) */}
           <Image
             src="/images/editorial/garden-walkway.jpg"
-            alt="Hexagonal planters and gravel walkway on a Landfairy-designed rooftop garden in Lagos"
+            alt="Palm-lined estate road landscaped by Landfairy Global Investment Ltd at Golden Park Estate, Ajah"
             fill
-            className="object-cover object-top"
+            className="object-cover object-center"
           />
         </motion.div>
       </div>

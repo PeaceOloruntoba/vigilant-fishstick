@@ -6,11 +6,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiMenu, FiX } from "react-icons/fi";
 
 const NAV_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#philosophy" },
-  { label: "Projects", href: "#projects" },
-  { label: "References", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#philosophy" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "References", href: "/#testimonials" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navigation() {
@@ -23,7 +24,7 @@ export default function Navigation() {
         className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-3 md:px-8 lg:px-16"
       >
         <a
-          href="#top"
+          href="/"
           aria-label="Landfairy Global Investment Ltd home"
           className="flex items-center gap-2"
         >
@@ -60,7 +61,7 @@ export default function Navigation() {
         </ul>
 
         <a
-          href="#contact"
+          href="/#contact"
           className="hidden rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800 md:inline-block"
         >
           Request a Quote
@@ -104,7 +105,7 @@ export default function Navigation() {
               ))}
               <li className="pt-2">
                 <a
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setIsOpen(false)}
                   className="block rounded-full bg-emerald-700 px-5 py-3 text-center text-sm font-medium text-stone-50 transition-colors hover:bg-emerald-800"
                 >

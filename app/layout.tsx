@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -43,14 +43,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  icons: {
-    icon: [
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico" },
-    ],
-    shortcut: "/favicon-32.png",
-    apple: "/apple-touch-icon.png",
-  },
   openGraph: {
     title:
       "Landfairy Global Investment Ltd | Landscape Architecture & Horticulture, Lagos, Nigeria",
@@ -63,9 +55,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/images/hero/hero-background.jpg",
-        width: 1062,
-        height: 598,
-        alt: "Landscaped garden border by Landfairy Global Investment Ltd",
+        width: 1080,
+        height: 810,
+        alt: "Rooftop garden landscaped by Landfairy Global Investment Ltd overlooking Lagos, Nigeria",
       },
     ],
   },
@@ -81,6 +73,10 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#022c22",
 };
 
 // ---------------------------------------------------------------------------

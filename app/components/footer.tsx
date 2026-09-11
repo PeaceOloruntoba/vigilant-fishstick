@@ -2,11 +2,12 @@ import Image from "next/image";
 import { FiInstagram, FiFacebook, FiMessageCircle } from "react-icons/fi";
 
 const FOOTER_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#philosophy" },
-  { label: "Projects", href: "#projects" },
-  { label: "References", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#philosophy" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "References", href: "/#testimonials" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Footer() {
