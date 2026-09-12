@@ -68,7 +68,7 @@ export default function Editorial() {
           {/* Golden Park Estate, Ajah — real Landfairy site photography (cropped
               from the project's before/after comparison photo) */}
           <Image
-            src="/images/editorial/garden-walkway.jpg"
+            src="/images/editorial/garden-walkway.png"
             alt="Palm-lined estate road landscaped by Landfairy Global Investment Ltd at Golden Park Estate, Ajah"
             fill
             className="object-cover object-center"

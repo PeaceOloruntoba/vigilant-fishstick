@@ -1,16 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  type PanInfo,
-  type Variants,
-} from "framer-motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { GiTreeBranch } from "react-icons/gi";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const EASE_OUT = [0.22, 1, 0.36, 1] as const;
 
@@ -34,10 +27,6 @@ type Project = {
    */
   imageBrief?: string;
 };
-
-type MediaItem =
-  | { type: "video"; src: string; poster?: string }
-  | { type: "image"; src: string; alt: string };
 
 const CATEGORIES: Category[] = ["All", "Estate", "Residential", "Institutional"];
 
@@ -100,227 +89,6 @@ const PROJECTS: Project[] = [
   // },
 ];
 
-// ---------------------------------------------------------------------------
-// Featured National Theatre carousel: 4 items (1 Video + 3 Images).
-// - Video is slide index 0 and autoplays without manual user play triggers.
-// - When the video ends, it advances automatically to the images.
-// - Image slides advance every 3 seconds.
-// - Manual slide navigation resets and pauses/re-prepares video to 0s.
-// ---------------------------------------------------------------------------
-const THEATRE_MEDIA: MediaItem[] = [
-  {
-    type: "video",
-    src: "/videos/rooftop-garden-walkthrough.mp4",
-    poster: "/images/portfolio/rooftop-garden-1.jpg",
-  },
-  {
-    type: "image",
-    src: "/images/portfolio/rooftop-garden-2.jpg",
-    alt: "Rooftop garden landscaped by Landfairy at the National Theatre, Lagos - View 1",
-  },
-  {
-    type: "image",
-    src: "/images/portfolio/rooftop-garden-1.jpg",
-    alt: "Rooftop garden landscaped by Landfairy at the National Theatre, Lagos - View 2",
-  },
-  {
-    type: "image",
-    src: "/images/portfolio/rooftop-garden-3.jpg",
-    alt: "Rooftop garden landscaped by Landfairy at the National Theatre, Lagos - View 3",
-  },
-];
-
-const THEATRE_AUTOPLAY_MS = 3000;
-const SWIPE_THRESHOLD = 60;
-const THEATRE_TOTAL = THEATRE_MEDIA.length;
-
-function NationalTheatreFeature() {
-  const [[index, direction], setSlide] = useState<[number, number]>([0, 0]);
-  const [isPaused, setIsPaused] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const prefersReducedMotion = useReducedMotion();
-
-  const activeMedia = THEATRE_MEDIA[index];
-
-  const paginate = useCallback((step: number) => {
-    // Pause / reset video timing when switching manually or automatically
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-    setSlide(([current]) => [(current + step + THEATRE_TOTAL) % THEATRE_TOTAL, step]);
-  }, []);
-
-  const goTo = useCallback((target: number) => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-    setSlide(([current]) => [target, target > current ? 1 : -1]);
-  }, []);
-
-  // Handle slideshow timer for image slides only
-  useEffect(() => {
-    if (isPaused || prefersReducedMotion || activeMedia.type === "video") return;
-
-    const timer = setInterval(() => paginate(1), THEATRE_AUTOPLAY_MS);
-    return () => clearInterval(timer);
-  }, [isPaused, prefersReducedMotion, paginate, activeMedia.type]);
-
-  // Handle video autoplay execution when video slide is active
-  useEffect(() => {
-    if (activeMedia.type === "video" && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Fallback if browser policy blocks autoplay with unmuted audio
-        });
-      }
-    }
-  }, [index, activeMedia.type]);
-
-  const handleDragEnd = (
-    _event: MouseEvent | TouchEvent | PointerEvent,
-    info: PanInfo
-  ) => {
-    if (info.offset.x < -SWIPE_THRESHOLD) paginate(1);
-    else if (info.offset.x > SWIPE_THRESHOLD) paginate(-1);
-  };
-
-  const slideVariants: Variants = {
-    enter: (dir: number) => ({
-      opacity: 0,
-      x: prefersReducedMotion ? 0 : dir > 0 ? 48 : -48,
-    }),
-    center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: EASE_OUT } },
-    exit: (dir: number) => ({
-      opacity: 0,
-      x: prefersReducedMotion ? 0 : dir > 0 ? -48 : 48,
-      transition: { duration: 0.3, ease: EASE_OUT },
-    }),
-  };
-
-  return (
-    <div className="mb-20">
-      <div className="max-w-2xl">
-        <h3 className="font-[family-name:var(--font-fraunces)] text-xl text-emerald-950 md:text-2xl">
-          National Theatre, Lagos
-        </h3>
-        <p className="mt-2 text-sm text-emerald-950/70 md:text-base">
-          Design and installation, 2026 — a rooftop garden at one of
-          Lagos's most recognisable landmarks.
-        </p>
-      </div>
-
-      <div
-        className="relative mx-auto mt-8 max-w-3xl"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onFocus={() => setIsPaused(true)}
-        onBlur={() => setIsPaused(false)}
-      >
-        <button
-          type="button"
-          onClick={() => paginate(-1)}
-          aria-label="Previous slide"
-          className="absolute left-0 top-1/2 z-10 hidden h-11 w-11 -translate-x-[130%] -translate-y-1/2 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 shadow-sm transition-colors hover:bg-emerald-50 md:flex"
-        >
-          <FiChevronLeft size={20} />
-        </button>
-        <button
-          type="button"
-          onClick={() => paginate(1)}
-          aria-label="Next slide"
-          className="absolute right-0 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 translate-x-[130%] items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 shadow-sm transition-colors hover:bg-emerald-50 md:flex"
-        >
-          <FiChevronRight size={20} />
-        </button>
-
-        <div
-          className="relative aspect-[4/3] w-full overflow-hidden rounded-md bg-stone-100 sm:aspect-video"
-          role="region"
-          aria-roledescription="carousel"
-          aria-label="National Theatre rooftop garden showcase"
-        >
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={index}
-              custom={direction}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              drag="x"
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.65}
-              onDragEnd={handleDragEnd}
-              className="absolute inset-0 cursor-grab active:cursor-grabbing"
-            >
-              {activeMedia.type === "video" ? (
-                <video
-                  ref={videoRef}
-                  src={activeMedia.src}
-                  poster={activeMedia.poster}
-                  autoPlay
-                  muted
-                  playsInline
-                  onEnded={() => paginate(1)}
-                  className="h-full w-full object-cover pointer-events-none"
-                />
-              ) : (
-                <Image
-                  src={activeMedia.src}
-                  alt={activeMedia.alt}
-                  fill
-                  className="object-cover"
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        <div className="mt-6 flex items-center justify-center gap-5">
-          <button
-            type="button"
-            onClick={() => paginate(-1)}
-            aria-label="Previous slide"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 transition-colors hover:bg-emerald-50 md:hidden"
-          >
-            <FiChevronLeft size={16} />
-          </button>
-
-          <div className="flex items-center gap-2">
-            {THEATRE_MEDIA.map((item, i) => (
-              <button
-                key={item.src + i}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Show slide ${i + 1} of ${THEATRE_TOTAL}`}
-                aria-current={i === index}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === index
-                    ? "w-6 bg-emerald-700"
-                    : "w-2 bg-emerald-950/20 hover:bg-emerald-950/40"
-                }`}
-              />
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => paginate(1)}
-            aria-label="Next slide"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-950/15 bg-white text-emerald-950 transition-colors hover:bg-emerald-50 md:hidden"
-          >
-            <FiChevronRight size={16} />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ProjectCard({ project }: { project: Project }) {
   return (
     <motion.article
@@ -379,8 +147,6 @@ export default function ProjectShowcase() {
       className="w-full bg-stone-50 px-4 py-20 md:px-8 md:py-28 lg:px-16"
     >
       <div className="mx-auto max-w-6xl">
-        <NationalTheatreFeature />
-
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <h2
             id="projects-heading"

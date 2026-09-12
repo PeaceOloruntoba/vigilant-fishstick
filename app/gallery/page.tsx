@@ -28,6 +28,19 @@ export default function GalleryPage() {
             </p>
           </div>
 
+          <div className="mt-10 max-w-4xl overflow-hidden rounded-md bg-black">
+            <video
+              src="/videos/rooftop-garden-walkthrough.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              controls
+              aria-label="National Theatre landscaping project walkthrough"
+              className="aspect-video h-full w-full object-cover"
+            />
+          </div>
+
           <div className="mt-12">
             <GalleryGrid />
           </div>

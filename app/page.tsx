@@ -3,6 +3,7 @@ import Hero from "./components/hero";
 import Services from "./components/services";
 import Editorial from "./components/editorial";
 import ProjectShowcase from "./components/project_showcase";
+import Gallery from "./components/gallery";
 import Testimonials from "./components/testimonials";
 import Contact from "./components/contact";
 import Footer from "./components/footer";
@@ -15,6 +16,7 @@ export default function Home() {
       <Services />
       <Editorial />
       <ProjectShowcase />
+      <Gallery />
       <Testimonials />
       <Contact />
       <Footer />

@@ -6,17 +6,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { GALLERY_IMAGES, type GalleryImage } from "../data/gallery-images";
 
-const PAGE_SIZE = 9;
-
 export default function GalleryGrid() {
   const categories = useMemo(() => {
-    const set = new Set<string>();
-    GALLERY_IMAGES.forEach((img) => img.category && set.add(img.category));
-    return ["All", ...Array.from(set)];
+    const categorySet = new Set<string>();
+    GALLERY_IMAGES.forEach((img) => img.category && categorySet.add(img.category));
+    return ["All", ...Array.from(categorySet)];
   }, []);
-
   const [activeCategory, setActiveCategory] = useState("All");
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filtered = useMemo(
@@ -26,21 +22,23 @@ export default function GalleryGrid() {
         : GALLERY_IMAGES.filter((img) => img.category === activeCategory),
     [activeCategory]
   );
-
-  const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
+  const originalImages = filtered.filter((img) => !img.phase);
+  const comparisonImages = GALLERY_IMAGES.filter((img) => img.phase);
+  const lightboxImages = [...originalImages, ...comparisonImages];
 
   const openLightbox = (index: number) => setLightboxIndex(index);
   const closeLightbox = () => setLightboxIndex(null);
   const showNext = () =>
-    setLightboxIndex((i) => (i === null ? null : (i + 1) % filtered.length));
+    setLightboxIndex((i) =>
+      i === null ? null : (i + 1) % lightboxImages.length
+    );
   const showPrev = () =>
     setLightboxIndex((i) =>
-      i === null ? null : (i - 1 + filtered.length) % filtered.length
+      i === null ? null : (i - 1 + lightboxImages.length) % lightboxImages.length
     );
 
   const active: GalleryImage | null =
-    lightboxIndex !== null ? filtered[lightboxIndex] : null;
+    lightboxIndex !== null ? lightboxImages[lightboxIndex] : null;
 
   return (
     <div>
@@ -53,7 +51,7 @@ export default function GalleryGrid() {
               type="button"
               onClick={() => {
                 setActiveCategory(category);
-                setVisibleCount(PAGE_SIZE);
+                setLightboxIndex(null);
               }}
               className={`rounded-full px-4 py-2 text-sm transition-colors ${
                 isActive
@@ -67,36 +65,70 @@ export default function GalleryGrid() {
         })}
       </div>
 
-      <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
-        {visible.map((img, i) => (
-          <button
-            key={img.id}
-            type="button"
-            onClick={() => openLightbox(i)}
-            className="group mb-4 block w-full overflow-hidden rounded-md bg-stone-100"
-          >
-            <Image
-              src={img.src}
-              alt={img.alt}
-              width={800}
-              height={600}
-              className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-          </button>
-        ))}
+      <div className="mt-10">
+        <h2 className="font-[family-name:var(--font-fraunces)] text-2xl text-emerald-950">
+          All works
+        </h2>
+        <div className="mt-5 columns-1 gap-4 sm:columns-2 lg:columns-3">
+          {originalImages.map((img) => {
+            const index = lightboxImages.indexOf(img);
+            return (
+              <button
+                key={img.id}
+                type="button"
+                onClick={() => openLightbox(index)}
+                className="group mb-4 block w-full overflow-hidden rounded-md bg-stone-100"
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  width={800}
+                  height={600}
+                  className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                />
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {hasMore && (
-        <div className="mt-8 flex justify-center">
-          <button
-            type="button"
-            onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-            className="rounded-full border border-emerald-950/15 bg-white px-7 py-3 text-sm font-medium text-emerald-950 transition-colors hover:bg-emerald-50"
-          >
-            Load more
-          </button>
-        </div>
-      )}
+      <div className="mt-16 space-y-14">
+        {(["Before", "After"] as const).map((phase) => {
+          const images = comparisonImages.filter((img) => img.phase === phase);
+          return (
+            <section key={phase} aria-labelledby={`${phase.toLowerCase()}-heading`}>
+              <h2
+                id={`${phase.toLowerCase()}-heading`
+                }
+                className="font-[family-name:var(--font-fraunces)] text-2xl text-emerald-950"
+              >
+                National Theatre: {phase}
+              </h2>
+              <div className="mt-5 columns-1 gap-4 sm:columns-2 lg:columns-3">
+                {images.map((img) => {
+                  const index = lightboxImages.indexOf(img);
+                  return (
+                    <button
+                      key={img.id}
+                      type="button"
+                      onClick={() => openLightbox(index)}
+                      className="group mb-4 block w-full overflow-hidden rounded-md bg-stone-100"
+                    >
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        width={800}
+                        height={600}
+                        className="w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+      </div>
 
       {/* Theater-style lightbox */}
       <AnimatePresence>
