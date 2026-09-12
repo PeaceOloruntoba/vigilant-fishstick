@@ -29,12 +29,12 @@ export default function Navigation() {
           className="flex items-center gap-2"
         >
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt=""
-            width={910}
-            height={210}
+            width={1400}
+            height={330}
             priority
-            className="h-9 w-auto object-contain md:h-11"
+            className="h-11 w-auto max-w-[38vw] object-contain md:max-w-none"
           />
           <span className="flex flex-col leading-none">
             <span className="font-[family-name:var(--font-fraunces)] text-lg text-emerald-950 md:text-xl">
