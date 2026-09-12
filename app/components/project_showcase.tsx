@@ -78,26 +78,26 @@ const PROJECTS: Project[] = [
     image: "/images/portfolio/urban-homes.jpg",
     illustrative: true,
   },
-  {
-    id: "mayfair-gardens-estate",
-    name: "Mayfair Gardens Estate",
-    location: "Nigeria",
-    scope: "Installation and maintenance",
-    year: "2025",
-    category: "Estate",
-    imageBrief:
-      "Estate entrance or interior road with manicured lawn, flower beds, and paved kerbing — a gated residential estate in Nigeria",
-  },
-  {
-    id: "smith-hills-schools",
-    name: "Smith Hills Schools",
-    location: "Nigeria",
-    scope: "Design, installation and maintenance",
-    year: "2026",
-    category: "Institutional",
-    imageBrief:
-      "School compound grounds with lawn, tree planting, and walkways — a Nigerian school campus exterior",
-  },
+  // {
+  //   id: "mayfair-gardens-estate",
+  //   name: "Mayfair Gardens Estate",
+  //   location: "Nigeria",
+  //   scope: "Installation and maintenance",
+  //   year: "2025",
+  //   category: "Estate",
+  //   imageBrief:
+  //     "Estate entrance or interior road with manicured lawn, flower beds, and paved kerbing — a gated residential estate in Nigeria",
+  // },
+  // {
+  //   id: "smith-hills-schools",
+  //   name: "Smith Hills Schools",
+  //   location: "Nigeria",
+  //   scope: "Design, installation and maintenance",
+  //   year: "2026",
+  //   category: "Institutional",
+  //   imageBrief:
+  //     "School compound grounds with lawn, tree planting, and walkways — a Nigerian school campus exterior",
+  // },
 ];
 
 // ---------------------------------------------------------------------------
