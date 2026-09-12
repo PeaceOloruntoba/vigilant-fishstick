@@ -12,22 +12,22 @@ export type GalleryImage = {
 // is a reasonable default.
 export const GALLERY_IMAGES: GalleryImage[] = [
   {
-    id: "rooftop-1",
+    id: "national-theatre-1",
     src: "/images/portfolio/rooftop-garden-1.jpg",
-    alt: "Hexagonal concrete planters with tropical foliage on a Lagos rooftop garden",
-    category: "Commercial",
+    alt: "Hexagonal concrete planters with tropical foliage on the National Theatre rooftop garden, Lagos",
+    category: "National Theatre",
   },
   {
-    id: "rooftop-2",
+    id: "national-theatre-2",
     src: "/images/portfolio/rooftop-garden-2.jpg",
-    alt: "Rooftop garden walkway with Lagos skyline in the background",
-    category: "Commercial",
+    alt: "National Theatre rooftop garden walkway with the Lagos skyline in the background",
+    category: "National Theatre",
   },
   {
-    id: "rooftop-3",
+    id: "national-theatre-3",
     src: "/images/portfolio/rooftop-garden-3.jpg",
-    alt: "Concrete bench seating area on a landscaped rooftop garden",
-    category: "Commercial",
+    alt: "Concrete bench seating area on the National Theatre rooftop garden, Lagos",
+    category: "National Theatre",
   },
   {
     id: "golden-park",
@@ -54,3 +54,13 @@ export const GALLERY_IMAGES: GalleryImage[] = [
     category: "Residential",
   },
 ];
+
+// Notes:
+// - /images/hero/hero-image.jpg is intentionally NOT listed here — it's the
+//   same National Theatre photo as national-theatre-3 above, just saved at
+//   different compression for the hero background. Listing both would show
+//   the same photo twice.
+// - /images/editorial/about-section.jpg (the About section photo) is also
+//   NOT listed — it's about to be replaced with new photography, so there's
+//   nothing stable to caption yet. Once the new photo is in, add an entry
+//   for it here with real alt text.
