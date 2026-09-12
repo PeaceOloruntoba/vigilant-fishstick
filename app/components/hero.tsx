@@ -32,7 +32,7 @@ export default function Hero() {
     >
       {/* Corporate rooftop garden project, Lagos — real Landfairy site photography */}
       <Image
-        src="/images/hero/hero-background.jpg"
+        src="/images/hero/image.png"
         alt="Rooftop garden landscaped by Landfairy Global Investment Ltd overlooking Lagos, Nigeria"
         fill
         priority
