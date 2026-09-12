@@ -17,7 +17,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const SITE_URL = "https://www.landfairy.com";
+const SITE_URL = "https://vigilant-fishstick-snowy.vercel.app"; // TODO: update to the real production URL once deployed
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -54,10 +54,10 @@ export const metadata: Metadata = {
     siteName: "Landfairy Global Investment Ltd",
     images: [
       {
-        url: "/images/hero/hero-background.jpg",
+        url: "/images/hero/image.png",
         width: 1080,
         height: 810,
-        alt: "Rooftop garden landscaped by Landfairy Global Investment Ltd overlooking Lagos, Nigeria",
+        alt: "Landscape maintained by Landfairy Global Investment Ltd",
       },
     ],
   },
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
       "Landfairy Global Investment Ltd | Landscape Architecture & Horticulture, Lagos, Nigeria",
     description:
       "Design, installation and maintenance of landscapes for corporate, residential, institutional and government clients across Nigeria.",
-    images: ["/images/hero/hero-background.jpg"],
+    images: ["/images/hero/image.png"],
   },
   robots: {
     index: true,
@@ -93,7 +93,7 @@ const jsonLd = {
     "Landscape architecture, horticulture and property maintenance company based in Lagos, Nigeria, serving corporate, residential, institutional and government clients nationwide.",
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
-  image: `${SITE_URL}/images/hero/hero-background.jpg`,
+  image: `${SITE_URL}/images/hero/image.png`,
   telephone: "+2348160412420",
   email: "landfairyproperties@gmail.com",
   address: {
